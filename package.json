@@ -47,5 +47,8 @@
     "README.en.md",
     "screenshots"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
 }
