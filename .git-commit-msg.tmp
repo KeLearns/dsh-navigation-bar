@@ -1,9 +1,0 @@
-feat: softer tooltip transitions + translucent dark-mode border
-
-- dark tooltip border: solid #3A3B4A -> rgba(255,255,255,.10), shadow
-  deepened slightly for a softer lift
-- enter: 0.2s cubic-bezier(.22,1,.36,1) with a small translateX + scale
-  settle (was 0.15s ease-out)
-- exit: new dspn-tip-out keyframes + .dspn-tip-leave (0.18s ease-in,
-  forwards); the tip stays mounted during the fade and unmounts after
-  (reduced-motion keeps both animations off)
