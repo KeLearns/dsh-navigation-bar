@@ -6,7 +6,7 @@ one key anchors one user message of the current session, hovering shows a
 message. Built on the official DSH dual-face plugin mechanism (host + browser
 half) — no DSH source changes.
 
-[中文](README.md) · [Reference-image analysis](docs/ref-picture-analysis.md)
+[中文](README.md)
 
 ## Screenshots
 
@@ -79,8 +79,6 @@ plugin, restart the `dsh web` instance, then refresh the page.
 | `lib/client.js` | browser half (hand-written bundle, no build step; `window.__ModuleLoader__.load`) |
 | `cordis.patch.yml` | bundle patch: inserts the plugin row into the web profile roster |
 | `package.json` | `dsh.bundle.patch` + `dsh.client` (platform web) declarations |
-| `docs/ref-picture-analysis.md` | reference-image visual analysis (MiMo V2.5 multimodal) |
-| `ref_picture/` | design reference images (dark/light × hover/idle) |
 | `test/` | headless-browser CDP diagnostics + standalone offline test page |
 
 Data sources (all official APIs):

@@ -4,7 +4,7 @@
 每根键锚定一条用户消息，悬停显示该轮「用户消息 + 模型回复」预览，点击平滑跳转到对应消息。
 基于 DSH 官方双面插件机制（host + browser half），不侵入 DSH 源码。
 
-[English](README.en.md) · [参考图分析](docs/ref-picture-analysis.md)
+[English](README.en.md)
 
 ## 截图
 
@@ -68,8 +68,6 @@ dsh plugin --profile web add link:<本目录>
 | `lib/client.js` | browser 半端（手写 bundle，无构建步骤；`window.__ModuleLoader__.load`） |
 | `cordis.patch.yml` | bundle patch：把插件行插入 web profile 名单 |
 | `package.json` | `dsh.bundle.patch` + `dsh.client`（platform web）声明 |
-| `docs/ref-picture-analysis.md` | 参考图视觉分析（MiMo V2.5 多模态） |
-| `ref_picture/` | 设计参考图（浅/深色 × 悬停/非悬停） |
 | `test/` | CDP 无头浏览器诊断脚本 + 独立离线测试页 |
 
 数据来源（全部官方 API）：
