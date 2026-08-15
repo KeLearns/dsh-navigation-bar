@@ -42,15 +42,21 @@
 
 ## 安装
 
+[![npm version](https://img.shields.io/npm/v/@kelearns/dsh-navigation-bar)](https://www.npmjs.com/package/@kelearns/dsh-navigation-bar)
+[![npm downloads](https://img.shields.io/npm/dm/@kelearns/dsh-navigation-bar)](https://www.npmjs.com/package/@kelearns/dsh-navigation-bar)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 基于 DSH 官方插件机制安装到 web profile：
 
 ```bash
-# 本地开发（link 方式；改 lib/client.js 后刷新页面即生效）
-dsh plugin --profile web add link:<本目录>
-
-# 或从 npm 安装
+# 从 npm 安装（正式发布）
 dsh plugin --profile web add @kelearns/dsh-navigation-bar
+
+# 或本地开发（link 方式；改 lib/client.js 后刷新页面即生效）
+dsh plugin --profile web add link:<本目录>
 ```
+
+> npm 包已发布：[npmjs.com/package/@kelearns/dsh-navigation-bar](https://www.npmjs.com/package/@kelearns/dsh-navigation-bar)
 
 注意：插件名单在实例启动时加载 —— 新装插件后需重启 `dsh web` 实例再刷新页面。
 

@@ -52,15 +52,21 @@ half) — no DSH source changes.
 
 ## Install
 
+[![npm version](https://img.shields.io/npm/v/@kelearns/dsh-navigation-bar)](https://www.npmjs.com/package/@kelearns/dsh-navigation-bar)
+[![npm downloads](https://img.shields.io/npm/dm/@kelearns/dsh-navigation-bar)](https://www.npmjs.com/package/@kelearns/dsh-navigation-bar)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Installed into the web profile through the official DSH plugin mechanism:
 
 ```bash
-# Local development (link mode; edits to lib/client.js apply on page refresh)
-dsh plugin --profile web add link:<this-directory>
-
-# Or from npm
+# From npm (released)
 dsh plugin --profile web add @kelearns/dsh-navigation-bar
+
+# Or local development (link mode; edits to lib/client.js apply on page refresh)
+dsh plugin --profile web add link:<this-directory>
 ```
+
+> Published on npm: [npmjs.com/package/@kelearns/dsh-navigation-bar](https://www.npmjs.com/package/@kelearns/dsh-navigation-bar)
 
 Note: the plugin roster is loaded at instance startup — after adding a new
 plugin, restart the `dsh web` instance, then refresh the page.
