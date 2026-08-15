@@ -67,6 +67,9 @@ dsh plugin --profile web add link:<this-directory>
 ```
 
 > Published on npm: [npmjs.com/package/@kelearns/dsh-navigation-bar](https://www.npmjs.com/package/@kelearns/dsh-navigation-bar)
+>
+> Listed in [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin) curated registry;
+> also searchable as `navigation-bar` in the **Plugin Market** tab of dsh settings ([dsh-market](https://github.com/dsh-market/dsh-market)).
 
 Note: the plugin roster is loaded at instance startup — after adding a new
 plugin, restart the `dsh web` instance, then refresh the page.

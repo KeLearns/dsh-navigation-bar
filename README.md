@@ -57,6 +57,9 @@ dsh plugin --profile web add link:<本目录>
 ```
 
 > npm 包已发布：[npmjs.com/package/@kelearns/dsh-navigation-bar](https://www.npmjs.com/package/@kelearns/dsh-navigation-bar)
+>
+> 已收录于 [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin) 精选目录，
+> 也可以在 dsh 设置页的 **Plugin Market**（[dsh-market](https://github.com/dsh-market/dsh-market)）中搜索 `navigation-bar` 一键安装。
 
 注意：插件名单在实例启动时加载 —— 新装插件后需重启 `dsh web` 实例再刷新页面。
 
