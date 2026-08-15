@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  body { margin: 0; font-family: system-ui, sans-serif; }
+  .frame { position: relative; display: flex; height: 760px; }
+  .sidebar { width: 260px; background: #f3f4f6; border-right: 1px solid #e5e7eb; flex: none; }
+  .center { flex: 1; position: relative; min-width: 0; }
+  .scrollport { position: absolute; inset: 0; overflow-y: auto; padding: 0 24px; }
+  .row { height: 120px; margin: 8px 0; background: #ececec; border-radius: 8px; display: flex; align-items: center; padding: 0 12px; }
+  .overlayLayer { position: absolute; inset: 0; pointer-events: none; z-index: 20; }
+  #mount { position: relative; height: 760px; }
+  #result { position: fixed; right: 8px; bottom: 8px; background: #111; color: #0f0; font: 12px monospace; padding: 8px; white-space: pre-wrap; z-index: 999; max-width: 560px; max-height: 60vh; overflow: auto; }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="sidebar">sidebar</div>
+    <div class="center">
+      <div class="scrollport" data-conversation-scroll>
+        <div class="row" data-chat-anchor-key="u1">user msg 1</div>
+        <div class="row" data-chat-anchor-key="a1">assistant 1</div>
+        <div class="row" data-chat-anchor-key="u2">user msg 2</div>
+        <div class="row" data-chat-anchor-key="a2">assistant 2</div>
+        <div style="height:60px" data-composer-seat></div>
+      </div>
+      <div class="overlayLayer" data-shell-overlay="true"></div>
+    </div>
+  </div>
+  <div id="mount"></div>
+  <pre id="result">pending…</pre>
+  <script>
+    window.__ERR__ = []
+    window.__LOG__ = []
+    window.onerror = function (msg, src, line, col, err) {
+      window.__ERR__.push(String(msg) + ' @' + line + ':' + col + (err && err.stack ? ' | ' + String(err.stack).split('\n').slice(0, 2).join(' / ') : ''))
+    }
+    window.addEventListener('unhandledrejection', function (e) { window.__ERR__.push('unhandledrejection: ' + String(e.reason)) })
+    var oc = console.error; console.error = function () { window.__LOG__.push('[error] ' + Array.prototype.join.call(arguments, ' ').slice(0, 400)); oc.apply(console, arguments) }
+    var ow = console.warn; console.warn = function () { window.__LOG__.push('[warn] ' + Array.prototype.join.call(arguments, ' ').slice(0, 300)); ow.apply(console, arguments) }
+    var oi = console.info; console.info = function () { window.__LOG__.push('[info] ' + Array.prototype.join.call(arguments, ' ').slice(0, 300)); oi.apply(console, arguments) }
+    window.__ModuleLoader__ = { load: function (spec) { window.__SPEC__ = spec } }
+  </script>
+  <script src="../lib/client.js"></script>
+  <script src="react.umd.development.js"></script>
+  <script src="react-dom.umd.development.js"></script>
+  <script>
+    (function () {
+      var result = document.getElementById('result')
+      var timeline = []
+      var spec = window.__SPEC__
+      var plugin = spec ? spec.factory(function (id) {
+        if (id === 'react') return window.React
+        throw new Error('test: no module for ' + id)
+      }) : null
+      var nodeMap = {
+        k1: { key: 'u1', kind: 'user', data: { kind: 'user', seq: 1, content: [{ type: 'text', text: '请帮我写一个快速排序算法，要求支持泛型' }] } },
+        k2: { key: 'a1', kind: 'assistant', data: { kind: 'assistant', blocks: [{ kind: 'text', text: '好的，这是快速排序的实现，平均时间复杂度 O(n log n)……' }] } },
+        k3: { key: 'u2', kind: 'user', data: { kind: 'user', seq: 2, content: [{ type: 'text', text: '再改成 TypeScript 版本，并补充单元测试用例' }] } },
+        k4: { key: 'a2', kind: 'assistant', data: { kind: 'assistant', blocks: [{ kind: 'text', text: '已改好。TS 版本如下……（省略长文）' }] } }
+      }
+      var snap = {
+        chat: { order: ['k1', 'k2', 'k3', 'k4'], nodes: { get: function (key) { return nodeMap[key] } } },
+        nodes: []
+      }
+      window.__SNAP__ = snap
+      var listeners = new Set()
+      var session = {
+        subscribe: function (fn) { listeners.add(fn); return function () { listeners.delete(fn) } },
+        getSnapshot: function () { return snap }
+      }
+      var captured = null
+      var ctx = {
+        sessions: { binding: function () { return { session: session } } },
+        slots: {
+          register: function (opts, Comp) { captured = { opts: opts, Comp: Comp }; return function () {} },
+          inject: function (key, cb) { window.__INJECT_KEY__ = key; window.__INJECT_CB__ = cb; return function () {} }
+        }
+      }
+      if (!plugin) { result.textContent = 'FATAL: no spec'; return }
+      try { plugin.apply(ctx) } catch (err) { result.textContent = 'APPLY THREW: ' + String(err && err.stack || err); return }
+      if (!captured && window.__INJECT_CB__) { try { window.__INJECT_CB__() } catch (err) { result.textContent = 'INJECT THREW: ' + String(err && err.stack || err); return } }
+      if (!captured) { result.textContent = 'FATAL: register never called (key=' + window.__INJECT_KEY__ + ')'; return }
+
+      var debug = window.__dspnNavDebug__ || null
+      var entriesProbe = null
+      var spProbe = null
+      try {
+        entriesProbe = debug && debug.buildEntries ? debug.buildEntries(snap) : 'NO DEBUG HOOK'
+        spProbe = debug && debug.findScrollport ? Boolean(debug.findScrollport()) : 'NO DEBUG HOOK'
+      } catch (err) {
+        entriesProbe = 'probe threw: ' + String(err && err.message || err)
+      }
+
+      var React = window.React
+      var ReactDOM = window.ReactDOM
+      var sessionList = { current: 'sess-1', ids: ['sess-1'], byId: {} }
+      var useSessions = function (sel) { return sel(sessionList) }
+      try {
+        var root = ReactDOM.createRoot(document.getElementById('mount'))
+        root.render(React.createElement(captured.Comp, { useSessions: useSessions, useWorkspaces: function () { return null } }))
+      } catch (err) {
+        result.textContent = 'RENDER THREW: ' + String(err && err.stack || err)
+        return
+      }
+
+      var t0 = Date.now()
+      var poll = window.setInterval(function () {
+        var rootCount = document.querySelectorAll('.dspn-root').length
+        var keyCount = document.querySelectorAll('.dspn-key').length
+        timeline.push({ t: Date.now() - t0, root: rootCount, key: keyCount })
+        if (Date.now() - t0 > 2500 || (rootCount > 0 && Date.now() - t0 > 300)) {
+          window.clearInterval(poll)
+          var out = {}
+          out.reactVersion = React.version
+          out.opts = captured.opts
+          out.probeEntries = entriesProbe
+          out.probeScrollport = spProbe
+          out.timeline = timeline
+          out.rootCount = rootCount
+          out.keyCount = keyCount
+          out.errors = window.__ERR__
+          out.logs = window.__LOG__.slice(0, 20)
+          var keys = document.querySelectorAll('.dspn-key')
+          var first = keys[0]
+          if (first) {
+            first.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }))
+            window.setTimeout(function () {
+              out.tipCount = document.querySelectorAll('.dspn-tip').length
+              out.offsets = []
+              for (var j = 0; j < keys.length; j++) out.offsets.push(keys[j].getAttribute('data-offset'))
+              result.textContent = JSON.stringify(out, null, 2)
+            }, 300)
+          } else {
+            result.textContent = JSON.stringify(out, null, 2)
+          }
+        }
+      }, 150)
+    })()
+  </script>
+</body>
+</html>
