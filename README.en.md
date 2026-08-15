@@ -10,7 +10,24 @@ half) — no DSH source changes.
 
 ## Screenshots
 
-> Coming soon (dark / light × hover / idle).
+**Dark theme · hovered** (full view + focused detail):
+
+![Dark hover full](screenshots/promo-dark-hover-full.png)
+
+| Dark hover focus | Dark idle focus |
+| --- | --- |
+| ![Dark hover focus](screenshots/promo-dark-hover-focus.png) | ![Dark idle focus](screenshots/promo-dark-idle-focus.png) |
+
+**Light theme** (hovered / idle full views):
+
+![Light hover full](screenshots/promo-light-hover-full.png)
+
+| Light hover focus | Light idle focus |
+| --- | --- |
+| ![Light hover focus](screenshots/promo-light-hover-focus.png) | ![Light idle focus](screenshots/promo-light-idle-focus.png) |
+
+> Full views show the bar in its real position within a session; focused views
+> show the piano-key details (key shapes, hover ladder, message preview tooltip).
 
 ## Features
 

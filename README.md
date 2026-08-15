@@ -8,7 +8,23 @@
 
 ## 截图
 
-> 宣传图待补充（深色 / 浅色 × 悬停 / 非悬停）。
+**深色主题 · 悬停态**（全屏 + 聚焦细节）：
+
+![深色悬停全屏](screenshots/promo-dark-hover-full.png)
+
+| 深色悬停聚焦 | 深色非悬停聚焦 |
+| --- | --- |
+| ![深色悬停聚焦](screenshots/promo-dark-hover-focus.png) | ![深色非悬停聚焦](screenshots/promo-dark-idle-focus.png) |
+
+**浅色主题**（悬停 / 非悬停全屏）：
+
+![浅色悬停全屏](screenshots/promo-light-hover-full.png)
+
+| 浅色悬停聚焦 | 浅色非悬停聚焦 |
+| --- | --- |
+| ![浅色悬停聚焦](screenshots/promo-light-hover-focus.png) | ![浅色非悬停聚焦](screenshots/promo-light-idle-focus.png) |
+
+> 全屏图展示导航条在会话界面中的实际位置；聚焦图展示钢琴键细节（键形、悬停阶梯与消息预览气泡）。
 
 ## 功能
 
