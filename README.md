@@ -1,54 +1,70 @@
 # dsh-navigation-bar
 
-钢琴键风格的会话导航条插件（DeepSeek Harness Web GUI 官方插件机制，与桌面壳无关）。
+钢琴键风格的**会话内**导航条 —— 为 DeepSeek Harness Web GUI 的单个会话提供多轮对话导航：
+每根键锚定一条用户消息，悬停显示该轮「用户消息 + 模型回复」预览，点击平滑跳转到对应消息。
+基于 DSH 官方双面插件机制（host + browser half），不侵入 DSH 源码。
+
+[English](README.en.md) · [参考图分析](docs/ref-picture-analysis.md)
+
+## 截图
+
+> 宣传图待补充（深色 / 浅色 × 悬停 / 非悬停）。
 
 ## 功能
 
-- **位置**：左侧边栏与主消息区分界线右侧的竖直窄条，叠加在主界面之上（官方
-  \`shell.overlay\` 槽位，不侵入 DSH 源码）。
-- **每个钢琴键锚定一个用户消息**（当前会话中每个 user 消息对应一根键，按时间正序）。
-- **悬停动效**：悬停键视为选中态 —— 变长（约 4 倍）并变色；上下相邻键长度
-  **阶梯递减 3 级**（≈65% / ≈47% / ≈30%），上下第 4 根键及更远恢复正常长度；
-  首/尾键悬停时阶梯自然单侧裁剪。
-- **悬停气泡**：显示该轮**用户消息（单行，超宽省略号）** 与 **模型消息（最多 3 行，
-  \`-webkit-line-clamp\` 省略）**。
-- **非悬停态**：所有键保持最短长度；**当前页面正在查看内容所对应的用户消息键高亮**
-  （主题色 + 左端圆点），随滚动实时联动。
-- **点击跳转**：点击任意键平滑滚动到对应消息。
-- 深浅色主题自适应（跟随 DSH \`data-ds-dark-theme\` + 系统媒体查询兜底）。
+- **会话内导航**：一根键 = 一条用户消息（含 agent 运行中发送的 steering 消息），按时间正序；
+  模型回复不单独占键，并入对应轮次的预览。
+- **参考图级视觉**：键簇固定 10px 键距、2px 键高、6px 最短长、26px 悬停长（≈4.3×），
+  在消息区内**垂直居中**；配色由参考图逐像素测量（浅色 `#D2D3D3` / `#767779` / `#1A1C1F`，
+  深色 `#454545` / `#A3A3A3` / `#FFFFFF`）。
+- **悬停阶梯**：悬停键变长变色，上下相邻 3 级阶梯（20 / 14 / 10px，≈77% / 54% / 38%），
+  第 4 邻恢复最短，首/尾键悬停时阶梯自然单侧裁剪。
+- **悬停气泡**：用户消息单行省略 + 对应模型回复最多 3 行（宽度模型 JS 截断 +
+  `-webkit-line-clamp` 双保险，超出以 … 省略）。
+- **当前位高亮**：非悬停时当前查看内容对应的键**仅变色**（长度不变），随滚动实时联动。
+- **点击跳转**；深浅色主题自适应（`data-ds-dark-theme` + prefers-color-scheme 兜底）。
 
-## 结构（官方双面插件）
+## 安装
 
-| 文件 | 说明 |
-| --- | --- |
-| \`index.js\` | host 半端（空操作 cordis 插件；数据全部走客户端官方会话服务） |
-| \`lib/client.js\` | browser 半端（手写 bundle，无构建步骤；\`window.__ModuleLoader__.load\`） |
-| \`cordis.patch.yml\` | bundle patch：把插件行插入 web profile 名单 |
-| \`package.json\` | \`dsh.bundle.patch\` + \`dsh.client\`（platform web）声明 |
+基于 DSH 官方插件机制安装到 web profile：
 
-数据来源（全部官方 API）：
-- \`ctx.sessions.binding(currentId).session\` → \`ConversationSnapshot\`
-  （\`useSyncExternalStore\` 实时订阅）
-- DOM 锚点：滚动容器 \`[data-conversation-scroll]\`，消息行
-  \`[data-chat-anchor-key]\`（与快照 \`chat\` 视图节点的稳定 key 对应）
-
-## 安装（官方插件机制）
-
-\`\`\`bash
-# 本地开发（link 方式，改代码后重启 web 实例生效）
+```bash
+# 本地开发（link 方式；改 lib/client.js 后刷新页面即生效）
 dsh plugin --profile web add link:<本目录>
 
 # 或从 npm 安装
 dsh plugin --profile web add @kelearns/dsh-navigation-bar
-\`\`\`
+```
 
-注意：DSH 的插件名单在实例启动时加载 —— 新插件安装后需要重启
-\`dsh web\` 实例（\`dsh web --port 3080\`）再刷新页面。
+注意：插件名单在实例启动时加载 —— 新装插件后需重启 `dsh web` 实例再刷新页面。
 
-## 参考图分析
+## 结构
 
-设计参考图由 MiMo V2.5（opencode-go，视觉多模态）逐图分析，
-完整结论与像素估算见 \`docs/ref-picture-analysis.md\`。
+| 文件 | 说明 |
+| --- | --- |
+| `index.js` | host 半端（空操作 cordis 插件） |
+| `lib/client.js` | browser 半端（手写 bundle，无构建步骤；`window.__ModuleLoader__.load`） |
+| `cordis.patch.yml` | bundle patch：把插件行插入 web profile 名单 |
+| `package.json` | `dsh.bundle.patch` + `dsh.client`（platform web）声明 |
+| `docs/ref-picture-analysis.md` | 参考图视觉分析（MiMo V2.5 多模态） |
+| `ref_picture/` | 设计参考图（浅/深色 × 悬停/非悬停） |
+| `test/` | CDP 无头浏览器诊断脚本 + 独立离线测试页 |
+
+数据来源（全部官方 API）：
+- `ctx.sessions.binding(currentId).session` → `ConversationSnapshot`
+  （`useSyncExternalStore` 实时订阅）
+- DOM 锚点：滚动容器 `[data-conversation-scroll]`，消息行 `[data-chat-anchor-key]`
+
+## 开发 / 测试
+
+```bash
+# 无头 Edge + CDP 审计：打开真实会话，检查键布局 / 颜色 / tooltip
+node test/cdp-audit.mjs
+
+# 参考图像素测量（生成视觉规格：键距 / 阶梯 / 配色）
+node test/img-analysis.cjs   # 非悬停参考图
+node test/img-strip.cjs      # 悬停参考图（阶梯长度与颜色）
+```
 
 ## License
 

@@ -1,7 +1,7 @@
 {
   "name": "@kelearns/dsh-navigation-bar",
   "description": "Piano-key style conversation navigation bar for the DeepSeek Harness web GUI: one key per user message with hover ladder animation, message-preview tooltip and active-message highlight. Official dual-face dsh plugin (host + client), mounted via the official plugin mechanism (dsh plugin add) — no dsh source changes.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "keywords": [
     "dsh",
     "dsh-plugin",
@@ -43,7 +43,8 @@
     "lib/client.js",
     "cordis.patch.yml",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "README.en.md"
   ],
   "license": "MIT"
 }
