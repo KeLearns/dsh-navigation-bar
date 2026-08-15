@@ -48,6 +48,14 @@
     "screenshots"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KeLearns/dsh-navigation-bar.git"
+  },
+  "homepage": "https://github.com/KeLearns/dsh-navigation-bar",
+  "bugs": {
+    "url": "https://github.com/KeLearns/dsh-navigation-bar/issues"
+  },
   "publishConfig": {
     "access": "public"
   }
