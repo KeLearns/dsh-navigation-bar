@@ -1,0 +1,13 @@
+# dsh-navigation-bar bundle patch: inserts the dual-face plugin row into the
+# web profile roster. Applied as a profile bundle layer (the dsh.bundle.patch
+# manifest field) over dsh-base; activate with
+#   dsh plugin --profile web add <package>
+#   dsh plugin --profile web add link:<this-directory>   (local development)
+#
+# The row is a bare plugin by package name: the node half (exports ".") runs
+# in the host process (currently a no-op; the piano bar is fully client-side),
+# and the dsh.client declaration in package.json makes the browser half
+# (exports "./client") load in the web GUI (shell.overlay slot entry).
+- insert:
+    - id: dsh-navigation-bar
+      name: '@kelearns/dsh-navigation-bar'
