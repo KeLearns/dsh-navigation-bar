@@ -1,3 +1,6 @@
 node_modules/
 *.log
 .restart-result.json
+
+# 本机开发工具（硬编码本机路径，不入库）
+scripts/
